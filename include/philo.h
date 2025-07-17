@@ -6,7 +6,7 @@
 /*   By: almejia- < almejia-@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:39:42 by almejia-          #+#    #+#             */
-/*   Updated: 2025/07/04 14:31:56 by almejia-         ###   ########.fr       */
+/*   Updated: 2025/07/17 16:22:20 by almejia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,10 @@ void				ft_init_philos(t_mem *mem);
 int					ft_create_monitor(t_mem *mem);
 
 // L2_B -  pthread : Mutex & Threads
-int	ft_create_threads(t_mem *mem);
-int	ft_create_even_threads(t_mem *mem);
-int	ft_create_odd_threads(t_mem *mem);
-int	ft_create_last_thread_if_needed(t_mem *mem);
+int					ft_create_threads(t_mem *mem);
+int					ft_create_even_threads(t_mem *mem);
+int					ft_create_odd_threads(t_mem *mem);
+int					ft_create_last_thread_if_needed(t_mem *mem);
 
 // L3 -  Routine Principal Thread
 void				*ft_routine(void *arg);

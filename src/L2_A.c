@@ -17,9 +17,9 @@ int	ft_l2(t_mem *mem)
 	if (ft_init_mutexes(mem))
 		return (1);
 	ft_init_philos(mem);
-	if (ft_create_threads(mem))
-		return (1);
 	if (ft_create_monitor(mem))
+		return (1);
+	if (ft_create_threads(mem))
 		return (1);
 	return (0);
 }
@@ -66,29 +66,13 @@ void	ft_init_philos(t_mem *mem)
 	}
 }
 
-int	ft_create_threads(t_mem *mem)
-{
-	int	i;
-
-	i = 0;
-	mem->start_time = get_time_ms();
-	while (i < mem->n_philo)
-	{
-		if (pthread_create(&mem->threads[i], NULL, &ft_routine,
-				&mem->philos[i]) != 0)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
 int	ft_create_monitor(t_mem *mem)
 {
 	pthread_t	monitor;
 
 	if (pthread_create(&monitor, NULL, &ft_monitor, mem) != 0)
 		return (1);
-	if (pthread_join(monitor, NULL))
+	if (pthread_detach(monitor) != 0)
 		return (1);
 	return (0);
 }

@@ -19,8 +19,7 @@ void	*ft_routine(void *arg)
 	philo = (t_philo *)arg;
 	if (philo->mem->n_philo == 1)
 		return (ft_solo_routine(philo));
-	ft_barrer_time(philo);
-	philo->time_last_meal = get_time_ms();
+	ft_set_time_last_meal(philo);
 	while (1)
 	{
 		ft_safe_print(philo, 4);
@@ -37,17 +36,21 @@ void	*ft_routine(void *arg)
 	return (NULL);
 }
 
-void	*ft_solo_routine(void *arg)
+void	*ft_solo_routine(t_philo *philo)
 {
-	t_philo	*philo;
-
-	philo = (t_philo *)arg;
 	philo->time_last_meal = get_time_ms();
 	pthread_mutex_lock(philo->left_fork);
 	ft_safe_print(philo, 1);
 	usleep(philo->mem->time_to_die * 1000);
 	pthread_mutex_unlock(philo->left_fork);
 	return (NULL);
+}
+
+void	ft_set_time_last_meal(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->m_time_last_meal);
+	philo->time_last_meal = get_time_ms();
+	pthread_mutex_unlock(&philo->m_time_last_meal);
 }
 
 void	ft_eat(t_philo *philo)

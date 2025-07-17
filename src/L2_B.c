@@ -1,0 +1,64 @@
+#include "../include/philo.h"
+
+int	ft_create_threads(t_mem *mem)
+{
+	mem->start_time = get_time_ms();
+	if (ft_create_even_threads(mem))
+		return (1);
+	usleep(100);
+	if (ft_create_odd_threads(mem))
+		return (1);
+	if (ft_create_last_thread_if_needed(mem))
+		return (1);
+	return (0);
+}
+
+int	ft_create_even_threads(t_mem *mem)
+{
+	int	i;
+
+	i = 0;
+	while (i < mem->n_philo)
+	{
+		if (i % 2 == 0)
+		{
+			if (pthread_create(&mem->threads[i], NULL,
+					&ft_routine, &mem->philos[i]) != 0)
+				return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	ft_create_odd_threads(t_mem *mem)
+{
+	int	i;
+
+	i = 0;
+	while (i < mem->n_philo - (mem->n_philo % 2))
+	{
+		if (i % 2 == 1)
+		{
+			if (pthread_create(&mem->threads[i], NULL,
+					&ft_routine, &mem->philos[i]) != 0)
+				return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	ft_create_last_thread_if_needed(t_mem *mem)
+{
+	int	i;
+
+	if (mem->n_philo % 2 == 1)
+	{
+		i = mem->n_philo - 1;
+		if (pthread_create(&mem->threads[i], NULL,
+				&ft_routine, &mem->philos[i]) != 0)
+			return (1);
+	}
+	return (0);
+}

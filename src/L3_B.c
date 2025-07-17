@@ -12,17 +12,6 @@
 
 #include "../include/philo.h"
 
-void	ft_barrer_time(t_philo *philo)
-{
-	int		group;
-	long	start_delay;
-
-	group = philo->id % 3;
-	start_delay = group * (philo->mem->time_to_eat / 2);
-	while (get_time_ms() - philo->mem->start_time < start_delay)
-		usleep(50);
-}
-
 int	ft_verify_starv(t_philo *philo)
 {
 	int	flag;

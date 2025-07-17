@@ -13,7 +13,7 @@
 #ifndef PHILO_H
 # define PHILO_H
 
-# include "../libft/libft.h"
+# include <limits.h>
 # include <pthread.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -72,16 +72,22 @@ int					ft_parse_args(t_mem *mem, char **argv);
 int					ft_alloc_threads_and_philos(t_mem *mem);
 int					ft_check_digit_args(char **argv);
 
-// L2 -  pthread : Mutex & Threads
+// L2_A -  pthread : Mutex & Threads
 int					ft_l2(t_mem *mem);
 int					ft_init_mutexes(t_mem *mem);
 void				ft_init_philos(t_mem *mem);
-int					ft_create_threads(t_mem *mem);
 int					ft_create_monitor(t_mem *mem);
+
+// L2_B -  pthread : Mutex & Threads
+int	ft_create_threads(t_mem *mem);
+int	ft_create_even_threads(t_mem *mem);
+int	ft_create_odd_threads(t_mem *mem);
+int	ft_create_last_thread_if_needed(t_mem *mem);
 
 // L3 -  Routine Principal Thread
 void				*ft_routine(void *arg);
-void				*ft_solo_routine(void *arg);
+void				*ft_solo_routine(t_philo *philo);
+void				ft_set_time_last_meal(t_philo *philo);
 void				ft_eat(t_philo *philo);
 void				ft_sleep(t_philo *philo);
 

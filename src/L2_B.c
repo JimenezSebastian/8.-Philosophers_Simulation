@@ -6,7 +6,7 @@
 /*   By: almejia- < almejia-@student.42madrid.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:21:38 by almejia-          #+#    #+#             */
-/*   Updated: 2025/07/17 17:26:14 by almejia-         ###   ########.fr       */
+/*   Updated: 2025/07/17 18:35:28 by almejia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_create_threads(t_mem *mem)
 	mem->start_time = get_time_ms();
 	if (ft_create_even_threads(mem))
 		return (1);
-	usleep(mem->time_to_eat / 3);
+	usleep(100);
 	if (ft_create_odd_threads(mem))
 		return (1);
 	return (0);
@@ -26,7 +26,6 @@ int	ft_create_threads(t_mem *mem)
 int	ft_create_even_threads(t_mem *mem)
 {
 	int	i;
-
 	i = 0;
 	while (i < mem->n_philo)
 	{

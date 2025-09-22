@@ -13,27 +13,31 @@
 #ifndef PHILO_H
 # define PHILO_H
 
-# include <limits.h>
-# include <pthread.h>
+# include <unistd.h>
+
 # include <stdio.h>
 # include <stdlib.h>
+
+
+# include <pthread.h>
+
 # include <sys/time.h>
-# include <unistd.h>
+# include <limits.h>
 
 typedef struct s_mem
 {
-	// Args entrada
+	// Input
 	int				n_philo;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				must_eat;
 
-	// var protegida : aviso
+	// Mutex 
 	int				f_routine_completed;
 	pthread_mutex_t	m_routine_completed;
 
-	// Propiedades Nodos Philo
+	// Content Philo Structs
 	struct s_philo	*philos;
 	pthread_mutex_t	*mutex;
 	pthread_t		*threads;
@@ -41,9 +45,8 @@ typedef struct s_mem
 	// Mutex print
 	pthread_mutex_t	print_mutex;
 
-	// Tiempo Inicio
+	// Reference for time in ms
 	long			start_time;
-
 }					t_mem;
 
 typedef struct s_philo
@@ -51,72 +54,63 @@ typedef struct s_philo
 	int				id;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
-
 	int				meals_target;
-
-	// Var protegida Revision tiempos
+	// Protect Vars
 	long			time_last_meal;
 	pthread_mutex_t	m_time_last_meal;
-
-	// Flag monitor - hilo inanicion
 	int				f_starvation;
 	pthread_mutex_t	m_starvation;
 
 	t_mem			*mem;
 }					t_philo;
 
-// L1 -  Reserva Base de Memoria
+// L = Layer. 
+// 			L1 -  Memory Allocate
 int					ft_l1(t_mem **mem, char **argv);
 int					ft_malloc_mem(t_mem **mem);
 int					ft_parse_args(t_mem *mem, char **argv);
 int					ft_alloc_threads_and_philos(t_mem *mem);
 int					ft_check_digit_args(char **argv);
 
-// L2_A -  pthread : Mutex & Threads
+// 			L2_A -  Pthread : Mutex, Init Philos & Create Monitor
 int					ft_l2(t_mem *mem);
 int					ft_init_mutexes(t_mem *mem);
 void				ft_init_philos(t_mem *mem);
 int					ft_create_monitor(t_mem *mem);
 
-// L2_B -  pthread : Mutex & Threads
+// 			L2_B -  Pthread : Create Philos
 int					ft_create_threads(t_mem *mem);
 int					ft_create_even_threads(t_mem *mem);
 int					ft_create_odd_threads(t_mem *mem);
 
-// L3 -  Routine Principal Thread
+// 			L3 -  Routine Principal Thread
 void				*ft_routine(void *arg);
 void				*ft_solo_routine(t_philo *philo);
 void				ft_set_time_last_meal(t_philo *philo);
 void				ft_eat(t_philo *philo);
 void				ft_sleep(t_philo *philo);
 
-// L3 -  Routine Principal Thread - B
+//			L3 -  Routine Principal Thread Utils
 void				ft_barrer_time(t_philo *philo);
 int					ft_verify_starv(t_philo *philo);
 void				ft_set_routine_completed(t_mem *mem);
 void				ft_lock_forks(t_philo *philo);
 void				ft_unlock_forks(t_philo *philo);
 
-// L4 -  Monitor Thread
+// 			L4 -  Monitor Thread
 void				*ft_monitor(void *arg);
 int					ft_should_stop(t_mem *mem);
 int					ft_is_active(t_philo *philo);
 void				ft_starv_protocol(t_mem *mem, int d);
 
-// LCE  -  Clean Exit
+// 			LCE  -  Clean Exit
 void				ft_lce(t_mem *mem);
 void				ft_graceful_shutedown(t_mem *mem);
 
-// LG -  General Utils
+// 			LGU -  General Utils
 long				get_time_ms(void);
 long				ft_atol(const char *str);
 void				ft_print_msg(t_philo *philo, int flag);
 void				ft_safe_print(t_philo *philo, int flag);
 
 #endif
-
-// Doc Arquitectura Programa
-// L (layer) [capa] Etiqueta Descriptora
-// Ext : Responsabilidad -> Evol :  Mayor A _ B _ C
-// L Clean_Exit.c * Ultima capa del hilo cronologico de eventos.
-// L General_Utils.c * Caja de herramientas * hojas
